@@ -66,20 +66,35 @@ def load_env_file() -> Path:
 _env_file_path = load_env_file()
 
 
-class Settings(BaseSettings):
-    """Application settings loaded from environment variables"""
+def _build_model_config(env_file_path: Optional[Path] = None) -> SettingsConfigDict:
+    """
+    Build model config dict dynamically based on env file path.
     
-    # Build model config with env_file if found
-    _env_file_config = {
+    Args:
+        env_file_path: Optional path to .env file. If None, uses global _env_file_path.
+        
+    Returns:
+        SettingsConfigDict instance
+    """
+    config_dict = {
         "env_file_encoding": "utf-8",
         "case_sensitive": False,
         "extra": "ignore"
     }
     
-    if _env_file_path:
-        _env_file_config["env_file"] = str(_env_file_path)
+    # Use provided path or fall back to global
+    path_to_use = env_file_path if env_file_path is not None else _env_file_path
     
-    model_config = SettingsConfigDict(**_env_file_config)
+    if path_to_use:
+        config_dict["env_file"] = str(path_to_use)
+    
+    return SettingsConfigDict(**config_dict)
+
+class Settings(BaseSettings):
+    """Application settings loaded from environment variables"""
+    
+    # Build model config with env_file if found (using function for dynamic building)
+    model_config = _build_model_config()
     
     # OpenAI Configuration
     openai_api_key: str = Field(..., description="OpenAI API key")
@@ -196,12 +211,23 @@ def reload_settings() -> Settings:
     """
     Reload settings from environment and .env file.
     
+    This function:
+    1. Reloads the .env file (if it exists)
+    2. Updates the global _env_file_path
+    3. Updates the Settings class model_config to use the new env file path
+    4. Creates a new Settings instance with the updated configuration
+    
     Returns:
         New Settings instance
     """
-    global _settings
-    # Reload .env file first
-    load_env_file()
+    global _settings, _env_file_path
+    
+    # Reload .env file and update global path
+    _env_file_path = load_env_file()
+    
+    # Update the class's model_config to reflect the new env file path
+    Settings.model_config = _build_model_config(_env_file_path)
+    
+    # Create new instance with updated config
     _settings = Settings()
     return _settings
-
