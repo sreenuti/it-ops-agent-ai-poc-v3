@@ -1,0 +1,10 @@
+{
+  "task_type": "zoom_audio_not_working",
+  "instruction_text": "To fix Zoom audio problems:\n\n1. Check audio settings in Zoom:\n   - Click audio settings (speaker/microphone icon)\n   - Test speaker: Click 'Test Speaker'\n   - Test microphone: Click 'Test Mic'\n   - Select correct audio devices from dropdown\n\n2. Check Windows audio settings:\n   - Right-click speaker icon > Open Sound settings\n   - Verify correct output/input device selected\n   - Test devices in Sound Control Panel\n   - Check volume levels (not muted)\n\n3. Join audio in Zoom:\n   - Ensure 'Join Audio' is clicked in meeting\n   - Choose 'Join with Computer Audio' not phone\n   - Check audio button is not muted (red slash)\n\n4. Update audio drivers:\n   - Device Manager > Sound, video and game controllers\n   - Right-click audio device > Update driver\n   - Or download latest from manufacturer website\n\n5. Restart audio services:\n   - Services.msc > Windows Audio\n   - Restart service if stopped\n   - Restart Windows Audio Endpoint Builder\n\n6. Check Zoom audio settings:\n   - Zoom Settings > Audio\n   - Enable 'Automatically join audio'\n   - Check 'Suppress background noise' settings\n   - Adjust speaker/mic volume\n\n7. Test in different applications:\n   - Play audio from other apps (YouTube, music)\n   - Record audio in Windows Voice Recorder\n   - Determine if issue is Zoom-specific or system-wide\n\n8. Check browser version (if using web client):\n   - Update browser to latest version\n   - Check browser permissions allow microphone/speaker\n   - Try different browser\n\n9. Reinstall Zoom:\n   - Uninstall Zoom completely\n   - Delete Zoom folders from AppData\n   - Download and reinstall latest version\n\n10. Hardware troubleshooting:\n    - Test headphones/speakers on different device\n    - Check cable connections\n    - Try different USB port if using USB headset\n    - Test built-in vs external audio devices",
+  "metadata": {
+    "platform": "windows,mac",
+    "complexity": "medium",
+    "category": "application_issues"
+  }
+}
+

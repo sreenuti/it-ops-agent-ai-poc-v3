@@ -1,0 +1,10 @@
+{
+  "task_type": "access_jira",
+  "instruction_text": "To troubleshoot Jira access issues:\n\n1. Verify user account status:\n   - Check if account is active in Jira Admin > User management\n   - Verify email address is confirmed\n   - Check if account is locked or suspended\n\n2. Check user permissions:\n   - Verify user is in 'jira-users' group (required for login)\n   - Check global permissions in Administration\n   - Verify project-level permissions\n\n3. Password reset (if user forgot password):\n   - User clicks 'Can't access your account?' on login page\n   - Or admin can reset: User management > Select user > Reset password\n\n4. Check browser/session issues:\n   - Clear browser cache and cookies\n   - Try incognito/private browsing mode\n   - Try different browser\n   - Clear Jira session cookies\n\n5. Verify network/firewall:\n   - Check if Jira URL is accessible\n   - Verify no firewall blocking Jira domain\n   - Check VPN connection if required\n\n6. Check SSO/authentication:\n   - Verify SSO configuration if using single sign-on\n   - Check if user account is linked to SSO\n   - Verify authentication method in user settings\n\n7. License/user limit:\n   - Check if Jira has reached user limit\n   - Verify license allows additional users\n   - Contact Jira admin if license upgrade needed\n\n8. Check project visibility:\n   - Verify user has access to specific projects\n   - Check project permissions and roles\n   - Verify user is not restricted by IP address filters",
+  "metadata": {
+    "platform": "web,jira",
+    "complexity": "medium",
+    "category": "access_management"
+  }
+}
+

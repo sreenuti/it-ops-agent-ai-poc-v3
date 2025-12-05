@@ -1,0 +1,10 @@
+{
+  "task_type": "teams_not_signing_in",
+  "instruction_text": "To resolve Teams authentication issues:\n\n1. Check credentials:\n   - Verify username and password are correct\n   - Try logging in through web browser first (teams.microsoft.com)\n   - Check if account requires MFA (Multi-Factor Authentication)\n\n2. Clear Teams cache:\n   - Close Teams completely\n   - Delete cache: %appdata%\\Microsoft\\Teams\n   - Delete: %localappdata%\\Microsoft\\Teams\n   - Restart Teams\n\n3. Check Office 365 account status:\n   - Verify account is active and not locked\n   - Check if password has expired\n   - Verify license is assigned in Office 365 admin\n\n4. Reset Teams credentials:\n   - Windows: Credential Manager > Windows Credentials\n   - Remove all Microsoft Teams entries\n   - Restart Teams and sign in again\n\n5. Check network/firewall:\n   - Verify Teams URLs are not blocked\n   - Check firewall allows Teams traffic\n   - Test connectivity: https://teams.microsoft.com\n\n6. Update Teams:\n   - Click profile icon > Check for updates\n   - Or download latest from teams.microsoft.com\n   - Uninstall and reinstall if needed\n\n7. Run Teams as administrator:\n   - Right-click Teams > Run as administrator\n   - Test if sign-in works with elevated privileges\n\n8. Check for proxy issues:\n   - File > Settings > Network\n   - Configure proxy settings if needed\n   - Test direct connection vs proxy\n\n9. Verify SSO configuration:\n   - Check if SSO (Single Sign-On) is configured\n   - Verify Azure AD connection\n   - Check conditional access policies\n\n10. Contact IT Admin if:\n    - Account shows as not licensed\n    - Organization policies prevent sign-in\n    - Domain authentication issues",
+  "metadata": {
+    "platform": "windows,mac",
+    "complexity": "medium",
+    "category": "application_issues"
+  }
+}
+

@@ -1,0 +1,10 @@
+{
+  "task_type": "shared_drive_access",
+  "instruction_text": "To grant shared drive access:\n\nFor Windows/Active Directory Shared Drive:\n1. Open File Explorer and navigate to the shared drive (e.g., \\\\server\\share)\n2. Right-click on the folder/drive\n3. Select 'Properties' > 'Sharing' tab\n4. Click 'Advanced Sharing'\n5. Check 'Share this folder'\n6. Click 'Permissions'\n7. Click 'Add' and enter user or group name\n8. Select appropriate permissions:\n   - Read: View and open files only\n   - Change: Read, create, modify, delete files\n   - Full Control: All permissions\n9. Click 'OK' to save\n\nFor OneDrive/SharePoint Shared Folder:\n1. Navigate to the SharePoint site or OneDrive folder\n2. Click 'Share' button\n3. Enter user email address\n4. Select permission level:\n   - Viewer (read-only)\n   - Editor (can edit)\n   - Owner (full control)\n5. Add optional message and click 'Send'\n\nPowerShell Command for Windows Share:\nGrant-NfsSharePermission -Name 'ShareName' -AccountName 'DOMAIN\\Username' -Permission ReadWrite\n\nOr using net command:\nnet share ShareName /grant:DOMAIN\\Username,READ\n\nFor Network Drive Mapping:\n1. Open File Explorer\n2. Click 'This PC' > 'Map network drive'\n3. Enter drive letter and share path\n4. Check 'Reconnect at sign-in' if needed\n5. Check 'Connect using different credentials' if required\n6. Click 'Finish'\n\nVerify access:\n- User should see the shared drive in File Explorer\n- Test creating/deleting files if permissions allow\n- Check event logs if access is denied",
+  "metadata": {
+    "platform": "windows,onedrive,sharepoint",
+    "complexity": "low",
+    "category": "access_management"
+  }
+}
+

@@ -5,6 +5,7 @@ import gradio as gr
 from typing import Optional, Tuple, List
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
+from datetime import datetime
 from src.agents.agent_factory import AgentFactory
 from src.agents.base_agent import BaseAgent
 from src.config.settings import get_settings
@@ -23,6 +24,9 @@ class GradioApp:
         self.agent = agent or AgentFactory.create_agent()
         self.chat_history: List[Tuple[str, str]] = []
         self.settings = get_settings()
+        self.start_time = datetime.utcnow().isoformat()
+        self.query_count = 0
+        self.error_count = 0
     
     def chat_interface(self, message: str, history: List[Tuple[str, str]]) -> Tuple[str, List[Tuple[str, str]]]:
         """
@@ -127,18 +131,21 @@ class GradioApp:
                 
                 # Process with agent
                 try:
+                    self.query_count += 1
                     result = self.agent.process_query(message, chat_history=agent_history, dry_run=dry_run)
                     response = result.get("response", "I'm sorry, I couldn't process your request.")
                     
                     if result.get("success"):
                         status = "✅"
                     else:
+                        self.error_count += 1
                         status = "❌"
                     
                     formatted_response = f"{status} {response}"
                     history.append((message, formatted_response))
                     
                 except Exception as e:
+                    self.error_count += 1
                     error_msg = f"❌ Error: {str(e)}"
                     history.append((message, error_msg))
                 
@@ -194,6 +201,84 @@ class GradioApp:
                     content={"status": "unhealthy", "reason": str(e)}
                 )
     
+    def add_metrics_endpoint(self, app: FastAPI):
+        """Add metrics endpoint for monitoring (Prometheus-compatible format)"""
+        @app.get("/metrics")
+        async def metrics():
+            """
+            Metrics endpoint for monitoring and observability
+            Returns metrics in Prometheus-compatible format
+            """
+            try:
+                # Calculate uptime
+                uptime_seconds = (datetime.utcnow() - datetime.fromisoformat(self.start_time)).total_seconds()
+                
+                # Basic metrics in Prometheus format
+                metrics_text = f"""# HELP itops_agent_queries_total Total number of queries processed
+# TYPE itops_agent_queries_total counter
+itops_agent_queries_total {self.query_count}
+
+# HELP itops_agent_errors_total Total number of errors
+# TYPE itops_agent_errors_total counter
+itops_agent_errors_total {self.error_count}
+
+# HELP itops_agent_uptime_seconds Uptime in seconds
+# TYPE itops_agent_uptime_seconds gauge
+itops_agent_uptime_seconds {uptime_seconds}
+
+# HELP itops_agent_healthy Service health status (1=healthy, 0=unhealthy)
+# TYPE itops_agent_healthy gauge
+itops_agent_healthy {1 if self.agent is not None else 0}
+"""
+                
+                # Calculate success rate if we have queries
+                if self.query_count > 0:
+                    success_rate = (self.query_count - self.error_count) / self.query_count
+                    metrics_text += f"""
+# HELP itops_agent_success_rate Success rate (0-1)
+# TYPE itops_agent_success_rate gauge
+itops_agent_success_rate {success_rate}
+"""
+                
+                from fastapi.responses import Response
+                return Response(content=metrics_text, media_type="text/plain")
+                
+            except Exception as e:
+                return JSONResponse(
+                    status_code=500,
+                    content={"error": "Failed to generate metrics", "reason": str(e)}
+                )
+        
+        @app.get("/metrics/json")
+        async def metrics_json():
+            """
+            Metrics endpoint in JSON format for easier consumption
+            """
+            try:
+                uptime_seconds = (datetime.utcnow() - datetime.fromisoformat(self.start_time)).total_seconds()
+                
+                metrics_data = {
+                    "service": "itops-agent",
+                    "start_time": self.start_time,
+                    "uptime_seconds": uptime_seconds,
+                    "queries_total": self.query_count,
+                    "errors_total": self.error_count,
+                    "healthy": self.agent is not None
+                }
+                
+                if self.query_count > 0:
+                    metrics_data["success_rate"] = (self.query_count - self.error_count) / self.query_count
+                else:
+                    metrics_data["success_rate"] = None
+                
+                return JSONResponse(content=metrics_data)
+                
+            except Exception as e:
+                return JSONResponse(
+                    status_code=500,
+                    content={"error": "Failed to generate metrics", "reason": str(e)}
+                )
+    
     def launch(self, share: bool = False, server_name: Optional[str] = None, server_port: Optional[int] = None):
         """
         Launch the Gradio interface
@@ -205,11 +290,12 @@ class GradioApp:
         """
         interface = self.create_interface()
         
-        # Add health check endpoint before launching
+        # Add health check and metrics endpoints before launching
         # Gradio Blocks exposes FastAPI app via .app attribute
         try:
             app = interface.app
             self.add_health_check(app)
+            self.add_metrics_endpoint(app)
         except AttributeError:
             # If app is not available yet, add it after launch
             # This is a fallback for different Gradio versions
@@ -221,12 +307,13 @@ class GradioApp:
             share=share
         )
         
-        # Try to add health check after launch if not added before
+        # Try to add health check and metrics after launch if not added before
         try:
             if hasattr(interface, 'app') and interface.app:
                 self.add_health_check(interface.app)
+                self.add_metrics_endpoint(interface.app)
         except Exception:
-            # Health check endpoint is optional, don't fail if it can't be added
+            # Endpoints are optional, don't fail if they can't be added
             pass
 
 

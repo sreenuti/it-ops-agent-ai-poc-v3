@@ -1,0 +1,10 @@
+{
+  "task_type": "application_crashing",
+  "instruction_text": "To troubleshoot application crashes:\n\n1. Check Event Viewer for errors:\n   - Open Event Viewer (eventvwr.msc)\n   - Windows Logs > Application\n   - Look for errors related to the crashing app\n   - Check System logs for related errors\n\n2. Check application logs:\n   - Look for log files in application directory\n   - Check AppData folder for crash dumps\n   - Review application-specific error logs\n\n3. Update the application:\n   - Check for available updates\n   - Install latest version\n   - Check if issue is known bug in current version\n\n4. Check system requirements:\n   - Verify OS version compatibility\n   - Check RAM and disk space available\n   - Verify .NET Framework or other dependencies installed\n\n5. Run as administrator:\n   - Right-click application > Run as administrator\n   - Test if elevated privileges fix the issue\n\n6. Check for conflicting software:\n   - Disable antivirus temporarily\n   - Check for software conflicts\n   - Review recently installed programs\n\n7. Repair installation:\n   - Control Panel > Programs > Uninstall\n   - Select application > Change/Repair\n   - Follow repair wizard\n\n8. Clear application cache/data:\n   - Close application\n   - Delete cache folders in AppData\n   - Clear temporary files\n   - Restart application\n\n9. Check compatibility mode:\n   - Right-click application > Properties > Compatibility\n   - Enable compatibility mode for older OS\n   - Run compatibility troubleshooter\n\n10. Reinstall application:\n    - Uninstall completely\n    - Delete all application folders\n    - Clear registry entries (if safe)\n    - Reinstall from official source\n\n11. Check for Windows updates:\n    - Install pending Windows updates\n    - Check for optional updates\n    - Restart after updates\n\n12. Memory dump analysis:\n    - If recurring crash, collect memory dump\n    - Use WinDbg or similar tool for analysis\n    - Check for specific error codes or modules",
+  "metadata": {
+    "platform": "windows",
+    "complexity": "high",
+    "category": "application_issues"
+  }
+}
+

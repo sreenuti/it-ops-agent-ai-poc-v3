@@ -1,0 +1,10 @@
+{
+  "task_type": "jira_access_request",
+  "instruction_text": "To grant Jira access to a user:\n\n1. Log into Jira as an administrator\n2. Go to Administration > User management\n3. Click 'Add user' or search for existing user\n\n4. If adding new user:\n   - Enter email address\n   - Set username\n   - Choose password or send invitation email\n   - Assign to appropriate groups\n\n5. Add user to relevant project roles:\n   - Go to the specific project\n   - Project settings > Roles\n   - Assign user to appropriate role (Developer, Reporter, Viewer, etc.)\n\n6. Set global permissions (if needed):\n   - Administration > Global permissions\n   - Add user to groups with required permissions\n   - Common groups: jira-users, jira-developers, jira-administrators\n\n7. Verify access:\n   - User should receive email notification\n   - User can log in at your Jira URL\n   - Check user can see assigned projects\n\n8. If using Jira Service Management:\n   - Add user to appropriate service project\n   - Assign customer, agent, or administrator role\n\nNote: Ensure user has valid email address as Jira requires email verification.",
+  "metadata": {
+    "platform": "web,jira",
+    "complexity": "low",
+    "category": "access_management"
+  }
+}
+

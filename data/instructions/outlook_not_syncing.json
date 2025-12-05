@@ -1,0 +1,10 @@
+{
+  "task_type": "outlook_not_syncing",
+  "instruction_text": "To fix Outlook sync problems:\n\n1. Check sync status:\n   - Look at Outlook status bar for sync errors\n   - Check 'Send/Receive' tab for error messages\n   - Review sync status in Account Settings\n\n2. Force manual sync:\n   - Press F9 or go to Send/Receive > Send/Receive All Folders\n   - Check if sync completes or shows errors\n\n3. Clear Outlook cache:\n   - Close Outlook completely\n   - Delete OST file: %localappdata%\\Microsoft\\Outlook\\*.ost\n   - Restart Outlook (will rebuild cache)\n\n4. Check Exchange/Office 365 connection:\n   - File > Account Settings > Account Settings\n   - Select account > Change > More Settings\n   - Connection tab: Test connection\n   - Verify server name and authentication\n\n5. Reset Outlook profile:\n   - Close Outlook\n   - Control Panel > Mail > Show Profiles\n   - Create new profile or repair existing\n   - Re-add email account\n\n6. Check network connectivity:\n   - Ping Exchange server: ping outlook.office365.com\n   - Check firewall allows Outlook traffic\n   - Verify proxy settings if using\n\n7. Disable add-ins:\n   - File > Options > Add-ins\n   - Disable all add-ins temporarily\n   - Restart Outlook and test sync\n\n8. Check Outlook updates:\n   - File > Office Account > Update Options\n   - Update Now to get latest fixes\n\n9. PowerShell repair:\n   - Run Outlook in safe mode: outlook.exe /safe\n   - Test sync in safe mode\n   - If works, issue is with add-in or settings\n\n10. Last resort - Reinstall Outlook:\n    - Uninstall Office\n    - Clear Office cache\n    - Reinstall and reconfigure",
+  "metadata": {
+    "platform": "windows",
+    "complexity": "high",
+    "category": "application_issues"
+  }
+}
+
