@@ -2,20 +2,84 @@
 Configuration management using Pydantic
 """
 import os
+from pathlib import Path
 from typing import Optional, Literal
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
+from dotenv import load_dotenv
+
+
+def find_project_root() -> Path:
+    """
+    Find the project root directory by looking for common marker files.
+    
+    Returns:
+        Path to project root directory
+    """
+    # Start from the current file's directory
+    current = Path(__file__).resolve().parent
+    
+    # Look for project root markers
+    markers = [
+        "requirements.txt",
+        "README.md",
+        "pytest.ini",
+        ".git",
+        "docker",
+        "k8s"
+    ]
+    
+    # Walk up the directory tree
+    for parent in [current] + list(current.parents):
+        if any((parent / marker).exists() for marker in markers):
+            return parent
+    
+    # Fallback to current file's parent's parent (assuming src/config/settings.py structure)
+    return current.parent.parent
+
+
+def load_env_file() -> Path:
+    """
+    Load .env file from project root directory.
+    
+    Returns:
+        Path to the .env file (if found)
+    """
+    project_root = find_project_root()
+    env_file = project_root / ".env"
+    
+    # Load .env file if it exists
+    if env_file.exists():
+        load_dotenv(dotenv_path=env_file, override=False)
+        return env_file
+    else:
+        # Try loading from current directory as fallback
+        env_file_current = Path(".env")
+        if env_file_current.exists():
+            load_dotenv(dotenv_path=env_file_current, override=False)
+            return env_file_current
+    
+    return None
+
+
+# Load .env file early before Settings class is instantiated
+_env_file_path = load_env_file()
 
 
 class Settings(BaseSettings):
     """Application settings loaded from environment variables"""
     
-    model_config = SettingsConfigDict(
-        env_file=".env",
-        env_file_encoding="utf-8",
-        case_sensitive=False,
-        extra="ignore"
-    )
+    # Build model config with env_file if found
+    _env_file_config = {
+        "env_file_encoding": "utf-8",
+        "case_sensitive": False,
+        "extra": "ignore"
+    }
+    
+    if _env_file_path:
+        _env_file_config["env_file"] = str(_env_file_path)
+    
+    model_config = SettingsConfigDict(**_env_file_config)
     
     # OpenAI Configuration
     openai_api_key: str = Field(..., description="OpenAI API key")
@@ -96,16 +160,48 @@ _settings: Optional[Settings] = None
 
 
 def get_settings() -> Settings:
-    """Get or create settings instance"""
+    """
+    Get or create settings instance.
+    
+    Returns:
+        Settings instance
+        
+    Raises:
+        ValueError: If required settings are missing (like OPENAI_API_KEY)
+    """
     global _settings
     if _settings is None:
-        _settings = Settings()
+        try:
+            _settings = Settings()
+        except Exception as e:
+            # Provide helpful error message for missing required keys
+            project_root = find_project_root()
+            env_file = project_root / ".env"
+            
+            error_msg = f"Failed to load settings: {str(e)}\n\n"
+            error_msg += "Please ensure:\n"
+            error_msg += f"1. A .env file exists in the project root: {env_file}\n"
+            error_msg += "2. The .env file contains required keys (e.g., OPENAI_API_KEY)\n"
+            error_msg += "3. See .env.example for a template of required keys\n"
+            
+            if not env_file.exists():
+                error_msg += f"\nNote: .env file not found at {env_file}\n"
+            
+            raise ValueError(error_msg) from e
+    
     return _settings
 
 
 def reload_settings() -> Settings:
-    """Reload settings from environment"""
+    """
+    Reload settings from environment and .env file.
+    
+    Returns:
+        New Settings instance
+    """
     global _settings
+    # Reload .env file first
+    load_env_file()
     _settings = Settings()
     return _settings
 

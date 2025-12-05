@@ -64,12 +64,15 @@ For detailed architecture documentation, see [ARCHITECTURE.md](ARCHITECTURE.md).
 
 ## Quick Start
 
+> **📖 Need more details?** 
+> - **Quick Setup:** See [QUICKSTART.md](QUICKSTART.md) for a 5-minute setup guide
+> - **Detailed Guide:** See [RUN_GUIDE.md](RUN_GUIDE.md) for comprehensive step-by-step instructions
+
 ### 1. Clone and Setup
 
 ```bash
-# Clone the repository
-git clone <repository-url>
-cd itops-agent
+# Navigate to project directory (if already cloned)
+cd "ITOps PoC v3"
 
 # Create virtual environment
 python -m venv venv
@@ -428,7 +431,15 @@ For full deployment guide, see [k8s/README.md](k8s/README.md).
 
 ## Documentation
 
+### Getting Started
+- **[QUICKSTART.md](QUICKSTART.md)** - 5-minute quick start guide
+- **[RUN_GUIDE.md](RUN_GUIDE.md)** - Comprehensive step-by-step run instructions
+- **[TESTING.md](TESTING.md)** - Complete testing guide and procedures
+
+### Reference Documentation
 - **[ARCHITECTURE.md](ARCHITECTURE.md)** - Detailed system architecture
+- **[USER_GUIDE.md](USER_GUIDE.md)** - User guide with examples
+- **[API_REFERENCE.md](API_REFERENCE.md)** - API reference documentation
 - **[k8s/README.md](k8s/README.md)** - Kubernetes deployment guide
 - **[data/instructions/README.md](data/instructions/README.md)** - Instruction file format and usage
 - **[GITHUB_SETUP.md](GITHUB_SETUP.md)** - GitHub repository setup guide
