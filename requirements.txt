@@ -1,0 +1,37 @@
+# Core Dependencies
+python-dotenv>=1.0.0
+pydantic>=2.5.0
+pydantic-settings>=2.1.0
+
+# LLM and AI
+openai>=1.12.0
+langchain>=0.1.0
+langchain-openai>=0.0.5
+
+# Vector Database
+chromadb>=0.4.22
+
+# Frontend
+gradio>=4.0.0
+
+# AWS
+boto3>=1.34.0
+awscli>=1.32.0
+
+# Testing
+pytest>=7.4.0
+pytest-cov>=4.1.0
+pytest-asyncio>=0.21.0
+pytest-mock>=3.12.0
+
+# Optional Agent Frameworks (for Phase 2)
+# Uncomment to enable additional frameworks
+# langgraph>=0.0.20
+# crewai>=0.28.0
+# pyautogen>=0.2.0
+
+# Utilities
+requests>=2.31.0
+python-json-logger>=2.0.7
+pyyaml>=6.0.1
+

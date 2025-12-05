@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: chroma-service
+  namespace: itops-agent
+  labels:
+    app: chroma
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8000
+    targetPort: 8000
+    protocol: TCP
+    name: http
+  selector:
+    app: chroma
+

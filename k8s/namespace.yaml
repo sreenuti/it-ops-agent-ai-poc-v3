@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: itops-agent
+  labels:
+    name: itops-agent
+    app: itops-agent
+

@@ -1,0 +1,10 @@
+{
+  "task_type": "outlook_sync",
+  "instruction_text": "To troubleshoot Outlook synchronization issues:\n\n1. Close Outlook completely\n2. Clear Outlook cache:\n   - Close Outlook\n   - Delete contents of: %localappdata%\\Microsoft\\Outlook\n   - Or use: Remove-Item -Path \"$env:LOCALAPPDATA\\Microsoft\\Outlook\\*.ost\" -Force\n\n3. Restart Outlook and let it rebuild the cache\n\n4. Check sync status:\n   - Open Outlook\n   - Go to Send/Receive tab\n   - Click 'Send/Receive All Folders'\n   - Check for sync errors in status bar\n\n5. Verify Exchange/Office 365 connection:\n   - File > Account Settings > Account Settings\n   - Check server settings and authentication\n   - Test connection: Test E-mail AutoConfiguration\n\n6. If still not syncing:\n   - Remove and re-add the account\n   - Check for Outlook updates\n   - Verify network connectivity to Exchange server\n   - Check for antivirus/firewall blocking Outlook",
+  "metadata": {
+    "platform": "windows",
+    "complexity": "medium",
+    "category": "application_issues"
+  }
+}
+

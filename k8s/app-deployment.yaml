@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: itops-agent
+  namespace: itops-agent
+  labels:
+    app: itops-agent
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: itops-agent
+  template:
+    metadata:
+      labels:
+        app: itops-agent
+    spec:
+      containers:
+      - name: itops-agent
+        image: itops-agent:latest  # Update with your image registry
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 7860
+          name: http
+        envFrom:
+        - configMapRef:
+            name: itops-agent-config
+        - secretRef:
+            name: itops-agent-secrets
+        volumeMounts:
+        - name: app-data
+          mountPath: /app/data
+        - name: app-logs
+          mountPath: /app/logs
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "500m"
+          limits:
+            memory: "4Gi"
+            cpu: "2000m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 7860
+          initialDelaySeconds: 40
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 7860
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+      volumes:
+      - name: app-data
+        persistentVolumeClaim:
+          claimName: app-data-pvc
+      - name: app-logs
+        emptyDir: {}
+

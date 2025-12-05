@@ -1,0 +1,96 @@
+version: '3.8'
+
+services:
+  chroma:
+    image: chromadb/chroma:latest
+    container_name: itops-chroma
+    ports:
+      - "8000:8000"
+    volumes:
+      - chroma_data:/chroma/chroma
+    environment:
+      - IS_PERSISTENT=TRUE
+      - PERSIST_DIRECTORY=/chroma/chroma
+      - ANONYMIZED_TELEMETRY=FALSE
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/heartbeat"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - itops-network
+    restart: unless-stopped
+
+  app:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: itops-agent
+    ports:
+      - "7860:7860"
+    environment:
+      # OpenAI Configuration
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_MODEL=${OPENAI_MODEL:-gpt-4}
+      
+      # Chroma Configuration
+      - CHROMA_HOST=chroma
+      - CHROMA_PORT=8000
+      - CHROMA_COLLECTION_NAME=${CHROMA_COLLECTION_NAME:-itops_instructions}
+      - CHROMA_PERSIST_DIR=/app/data/chroma_db
+      
+      # Agent Framework
+      - AGENT_FRAMEWORK=${AGENT_FRAMEWORK:-langchain}
+      
+      # AWS Configuration (optional)
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID:-}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY:-}
+      - AWS_REGION=${AWS_REGION:-us-east-1}
+      - AWS_PROFILE=${AWS_PROFILE:-}
+      
+      # System Configuration
+      - EXECUTION_ENVIRONMENT=${EXECUTION_ENVIRONMENT:-windows}
+      - WINDOWS_DOMAIN=${WINDOWS_DOMAIN:-}
+      - WINDOWS_USERNAME=${WINDOWS_USERNAME:-}
+      
+      # Logging
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - LOG_FILE=/app/logs/itops_agent.log
+      - LOG_FORMAT=${LOG_FORMAT:-json}
+      
+      # Application
+      - APP_HOST=0.0.0.0
+      - APP_PORT=7860
+      - DEBUG=${DEBUG:-false}
+      
+      # Security
+      - ALLOWED_COMMANDS=${ALLOWED_COMMANDS:-all}
+    volumes:
+      - app_data:/app/data
+      - app_logs:/app/logs
+    depends_on:
+      chroma:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7860/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - itops-network
+    restart: unless-stopped
+
+volumes:
+  chroma_data:
+    driver: local
+  app_data:
+    driver: local
+  app_logs:
+    driver: local
+
+networks:
+  itops-network:
+    driver: bridge
+

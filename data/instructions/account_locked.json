@@ -1,0 +1,10 @@
+{
+  "task_type": "account_locked",
+  "instruction_text": "To unlock a user account:\n\nFor Active Directory:\n1. Open Active Directory Users and Computers\n2. Navigate to the user account\n3. Right-click and select 'Properties'\n4. Go to 'Account' tab\n5. Uncheck 'Account is disabled' if it's checked\n6. Click 'OK'\n\nFor AWS IAM:\n1. Use AWS CLI:\n   aws iam update-login-profile --user-name USERNAME --no-password-reset-required\n2. Or via AWS Console:\n   - Go to IAM > Users\n   - Select the user\n   - Check 'Access' tab for any access keys that need to be enabled\n\nFor local Windows account:\n1. Open Computer Management\n2. Navigate to Local Users and Groups > Users\n3. Right-click the locked account\n4. Select 'Properties'\n5. Uncheck 'Account is disabled'\n6. If account is locked due to failed logins, wait 15-30 minutes or reset the lockout counter\n\nPowerShell command for AD:\nUnlock-ADAccount -Identity USERNAME",
+  "metadata": {
+    "platform": "aws,ad,windows",
+    "complexity": "low",
+    "category": "access_management"
+  }
+}
+

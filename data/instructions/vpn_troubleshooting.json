@@ -1,0 +1,10 @@
+{
+  "task_type": "vpn_troubleshooting",
+  "instruction_text": "To troubleshoot VPN connection issues:\n\n1. Check VPN service status:\n   - Windows: Get-Service -Name 'RasMan' (Remote Access Connection Manager)\n   - Linux: systemctl status openvpn (or your VPN service name)\n\n2. Verify network connectivity:\n   - Ping the VPN server: ping vpn.example.com\n   - Check DNS resolution: nslookup vpn.example.com\n   - Verify firewall rules allow VPN traffic\n\n3. Check VPN client configuration:\n   - Verify VPN server address is correct\n   - Check authentication credentials\n   - Verify certificate validity (if using certificate-based auth)\n\n4. Restart VPN service if needed:\n   - Windows: Restart-Service -Name 'RasMan'\n   - Linux: systemctl restart openvpn\n\n5. Check VPN logs for errors:\n   - Windows: Event Viewer > Applications and Services Logs\n   - Linux: journalctl -u openvpn (or your VPN service)\n\n6. Common fixes:\n   - Clear VPN client cache\n   - Reinstall VPN client if persistent issues\n   - Check for conflicting network adapters\n   - Verify user has VPN access permissions",
+  "metadata": {
+    "platform": "windows,linux",
+    "complexity": "high",
+    "category": "network_issues"
+  }
+}
+

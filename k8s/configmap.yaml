@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: itops-agent-config
+  namespace: itops-agent
+  labels:
+    app: itops-agent
+data:
+  # OpenAI Configuration
+  OPENAI_MODEL: "gpt-4"
+  
+  # Chroma Configuration
+  CHROMA_HOST: "chroma-service"
+  CHROMA_PORT: "8000"
+  CHROMA_COLLECTION_NAME: "itops_instructions"
+  CHROMA_PERSIST_DIR: "/app/data/chroma_db"
+  
+  # Agent Framework
+  AGENT_FRAMEWORK: "langchain"
+  
+  # AWS Configuration
+  AWS_REGION: "us-east-1"
+  
+  # System Configuration
+  EXECUTION_ENVIRONMENT: "windows"
+  
+  # Logging
+  LOG_LEVEL: "INFO"
+  LOG_FILE: "/app/logs/itops_agent.log"
+  LOG_FORMAT: "json"
+  
+  # Application
+  APP_HOST: "0.0.0.0"
+  APP_PORT: "7860"
+  DEBUG: "false"
+  
+  # Security
+  ALLOWED_COMMANDS: "all"
+
